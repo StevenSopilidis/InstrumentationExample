@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  ping:
+    container_name: ping
+    build: 
+      context: ../ping
+      dockerfile: Dockerfile
+    restart: on-failure
+    depends_on:
+      pong:
+        condition: service_started
+    environment:
+      - SERVER_ADDRESS=:8080
+      - PONG_SERVER_ADDRESS=http://pong:7070/api/v1/pong
+    ports:
+      - "8080:8080"
+  pong:
+    container_name: pong
+    build:
+      context: ../pong
+      dockerfile: Dockerfile
+    restart: on-failure
+    environment:
+      - SERVER_ADDRESS=:7070
