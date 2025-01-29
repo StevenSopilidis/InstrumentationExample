@@ -1,8 +1,10 @@
 package main
 
 import (
+	"context"
 	"log"
 	"ping/api"
+	"ping/otel"
 	"ping/utils"
 	"sync"
 )
@@ -12,6 +14,13 @@ func main() {
 	if err != nil {
 		log.Fatal("Could not load config: ", config)
 	}
+
+	shutDown := otel.InitTracerProvider(context.Background(), config)
+	defer func() {
+		if err := shutDown(context.Background()); err != nil {
+			log.Fatal("Could not shutdown tracer ", err)
+		}
+	}()
 
 	server := api.NewServer(config)
 

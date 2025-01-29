@@ -5,6 +5,8 @@ import "github.com/spf13/viper"
 type Config struct {
 	PongServerAddress string `mapstructure:"PONG_SERVER_ADDRESS"`
 	ServerAddress     string `mapstructure:"SERVER_ADDRESS"`
+	ServiceName       string `mapstructure:"SERVICE_NAME"`
+	TracingEndpoint   string `mapstructure:"TRACING_ENDPOINT"`
 }
 
 func LoadConfig(path string) (config Config, err error) {
@@ -22,6 +24,8 @@ func LoadConfig(path string) (config Config, err error) {
 	viper.AutomaticEnv()
 	viper.BindEnv("SERVER_ADDRESS")
 	viper.BindEnv("PONG_SERVER_ADDRESS")
+	viper.BindEnv("SERVICE_NAME")
+	viper.BindEnv("TRACING_ENDPOINT")
 
 	err = viper.Unmarshal(&config)
 	return config, err

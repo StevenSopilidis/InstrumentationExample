@@ -5,24 +5,31 @@ import (
 	"pong/utils"
 
 	"github.com/gin-gonic/gin"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/trace"
 )
 
 type Server struct {
 	router *gin.Engine
 	config utils.Config
+	tracer trace.Tracer
 }
 
 func NewServer(config utils.Config) *Server {
 	server := &Server{
 		config: config,
+		tracer: otel.Tracer("pong-tracer"),
 	}
 	server.setUpRouter()
+
 	return server
 }
 
 func (s *Server) setUpRouter() {
 	router := gin.Default()
 
+	router.Use(otelgin.Middleware(s.config.ServiceName))
 	router.GET("/api/v1/pong", s.pongHandler)
 
 	s.router = router
