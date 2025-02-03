@@ -15,6 +15,8 @@ func main() {
 		log.Fatal("Could not load config: ", config)
 	}
 
+	println("----> ", config.TracingEndpoint)
+
 	shutDown := otel.InitTracerProvider(context.Background(), config)
 	defer func() {
 		if err := shutDown(context.Background()); err != nil {

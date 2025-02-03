@@ -12,6 +12,8 @@ services:
     environment:
       - SERVER_ADDRESS=:8080
       - PONG_SERVER_ADDRESS=http://pong:7070/api/v1/pong
+      - SERVICE_NAME=ping
+      - TRACING_ENDPOINT=jaeger:4318
     ports:
       - "8080:8080"
   pong:
@@ -22,3 +24,13 @@ services:
     restart: on-failure
     environment:
       - SERVER_ADDRESS=:7070
+      - SERVICE_NAME=pong 
+      - TRACING_ENDPOINT=jaeger:4318
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    environment:
+      COLLECTOR_OTLP_ENABLED: "true"
+    ports:
+      - "16686:16686"
+      - "4318:4318"
+      - "4317:4317"

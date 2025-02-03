@@ -18,6 +18,7 @@ func InitTracerProvider(ctx context.Context, config utils.Config) func(context.C
 		otlptracehttp.WithEndpoint(config.TracingEndpoint),
 		otlptracehttp.WithInsecure(),
 	)
+
 	if err != nil {
 		log.Fatal("Could not connect to tracing endpoint: ", config.TracingEndpoint)
 	}
