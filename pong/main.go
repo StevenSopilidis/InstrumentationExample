@@ -22,6 +22,8 @@ func main() {
 		}
 	}()
 
+	otel.InitMeterProvider()
+
 	server := api.NewServer(config)
 
 	var wg sync.WaitGroup

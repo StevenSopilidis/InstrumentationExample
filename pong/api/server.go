@@ -5,6 +5,7 @@ import (
 	"pong/utils"
 
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/trace"
@@ -31,6 +32,7 @@ func (s *Server) setUpRouter() {
 
 	router.Use(otelgin.Middleware(s.config.ServiceName))
 	router.GET("/api/v1/pong", s.pongHandler)
+	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
 
 	s.router = router
 }
